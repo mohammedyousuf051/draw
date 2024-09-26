@@ -11,7 +11,7 @@ export const appConfig: ConnectionOptions = {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    synchronize: true,
+    synchronize: true, // SET TO FALSE IN PRODUCTION
     logging: false,
     entities: [Draw, Participant],
     migrations: [],
