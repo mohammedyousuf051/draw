@@ -2,6 +2,7 @@ import { getManager } from 'typeorm';
 import { getRepository } from 'typeorm';
 import { Draw } from '../entities/draw.entity';
 import { Participant } from '../../participants/entities/participant.entity';
+import { throwErrorIfDrawIsActive } from '../helpers/draw.helper';
 
 export class DrawService {
     async getActiveDraw(): Promise<Draw|undefined> {
@@ -13,13 +14,7 @@ export class DrawService {
 
     async startDraw(totalTickets: number): Promise<Draw> {
         const drawRepository = getRepository(Draw);
-        const activeDraw = await drawRepository.findOne({
-            where: { isActive: true },
-        });
-
-        if (activeDraw) {
-            throw new Error('A draw is already active.');
-        }
+        await throwErrorIfDrawIsActive();
         const draw = drawRepository.create({ totalTickets });
         return await drawRepository.save(draw);
     }

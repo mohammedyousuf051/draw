@@ -1,38 +1,20 @@
 import { getManager } from 'typeorm';
-import { Participant } from '../entities/participant.entity';
-import { Draw } from '../../draw/entities/draw.entity';
 import { getRepository } from 'typeorm';
+import { Participant } from '../entities/participant.entity';
 import { EnterDraw } from '../interfaces/enter.draw.interface';
+import { getActiveDrawOrThrowError } from '../../draw/helpers/draw.helper';
+import { throwErrorIfParicipantAlreadyEntered } from '../helpers/participant.helper';
 
 export class ParticipantService {
     async enterDraw({ hkid, name, age }: EnterDraw): Promise<Participant> {
-        const drawRepository = getRepository(Draw);
         const participantRepository = getRepository(Participant);
+        const activeDraw = await getActiveDrawOrThrowError();
+        await throwErrorIfParicipantAlreadyEntered(hkid, activeDraw);
 
-        // Check for an active draw
-        const activeDraw = await drawRepository.findOne({
-            where: { isActive: true },
-        });
-        if (!activeDraw) {
-            throw new Error('No active draw found.');
-        }
-
-        // Check if the participant already entered the draw
-        const existingParticipant = await participantRepository.findOne({
-            where: { hkid, draw: activeDraw },
-        });
-        if (existingParticipant) {
-            throw new Error(
-                'Participant with this HKID has already entered the draw.'
-            );
-        }
-
-        // Check if maximum ticket limit is reached
         if (activeDraw.enteredTickets >= activeDraw.totalTickets) {
             throw new Error('Maximum tickets for this draw have been reached.');
         }
 
-        // Create a new participant
         const participantCount = await participantRepository.count({
             where: { draw: activeDraw },
         });

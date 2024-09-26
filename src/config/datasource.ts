@@ -1,7 +1,7 @@
 import { ConnectionOptions } from 'typeorm';
 import { Draw } from '../draw/entities/draw.entity';
 import { Participant } from '../participants/entities/participant.entity';
-import * as dotenv from 'dotenv';
+import * as dotenv from 'dotenv'; // CAN USE NEW VERSION OF DOTENV
 dotenv.config();
 
 export const appConfig: ConnectionOptions = {
