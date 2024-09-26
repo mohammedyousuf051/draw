@@ -123,3 +123,35 @@ Set Up Load Testing Tool:
 Use a tool like Apache JMeter, Artillery, or Locust.
 Define test scenarios with different levels of concurrency and request rates.
 
+# Database Association Choice, Why I approached this way?
+
+`draw` - `participants` 
+(Not Included separate table for `tickets`)
+
+Since, this app is straight forward, I thought of having ticketNumber in participant table itself to reduce the overheads and lookups.
+
+### Reasons to Include a Tickets Table
+    Unique Ticket Management:
+
+    If we want to maintain a separate identity for each ticket, especially if tickets have unique numbers and may carry additional attributes (like status), having a dedicated Tickets table makes sense.
+
+    Tracking Ticket Information:
+    
+    If we plan to store more details about each ticket (e.g., issuance time, status, or even a history of ticket transfers), a separate table provides a clear structure.
+
+    Simplified Queries:
+    Queries related to tickets (like fetching all tickets for a draw or determining winner tickets) can be simpler and more efficient with a dedicated table.
+
+    Future Scalability:
+
+    If application to grow in complexity (e.g., adding features like ticket transfers, ticket sales, etc.), having a separate Tickets table can make it easier to implement these features later.
+
+### Reasons to Omit the Tickets Table
+    Simplicity:
+    If each participant is guaranteed to have only one ticket and there are no additional complexities, database model can be simplified by storing ticket information directly in the Participant table.
+
+    Reduced Overhead:
+    Fewer tables can lead to reduced database management overhead and potentially better performance for simple queries.
+
+    Direct Association:
+    Since it seems to have direct assoiciation without no any additional info, so having that in separate Column make sense to me, also considering the totalTicket can go upto 10**8.
