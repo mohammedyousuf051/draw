@@ -74,42 +74,38 @@ Run tests using Jest:
 
 ## How this can be Improved
 
-### 1. Outline the Limitations of Your System and How You Would Improve It
+### 1. Outline the Limitations of System and How can Improve It
 Limitations
 
 ### Database Synchronization:
+- **Current State:** The synchronize option in TypeORM is set to true, which is not suitable for production environments as it can lead to data loss.
+- **Improvement:** Set synchronize to false in production and use migration scripts to manage database schema changes. 
 
-   Current State: The synchronize option in TypeORM is set to true, which is not suitable for production environments as it can lead to data loss.
-   Improvement: Set synchronize to false in production and use migration scripts to manage database schema changes.
-
-Scalability:
-
-Current State: The application is designed to run on a single instance, which may not handle high traffic efficiently.
-Improvement: Implement horizontal scaling using container orchestration tools like Kubernetes. Use a load balancer to distribute traffic across multiple instances.
+### Scalability:
+- **Current State:** The application is designed to run on a single instance, which may not handle high traffic efficiently.
+- **Improvement:** Implement horizontal scaling using container orchestration tools like Kubernetes. Use a load balancer to distribute traffic across multiple instances.
+Also can increase the connection pooling for larger requests
 
 ### Error Handling:
-
-Current State: Basic error handling is implemented, but it may not cover all edge cases.
-Improvement: Implement comprehensive error handling and logging using tools like datadog.
+- **Current State:** Basic error handling is implemented, but it may not cover all edge cases.
+- **Improvement:** Implement comprehensive error handling and logging using tools like datadog.
 
 ### Security:
-
-Current State: Basic security measures are in place, but there may be vulnerabilities.
-Improvement: Implement security best practices such as input validation, rate limiting, and secure headers. 
+- **Current State:** Basic security measures are in place, but there may be vulnerabilities.
+- **Improvement:** Implement security best practices such as input validation, rate limiting, and secure headers. 
 
 ### Testing:
+- **Current State:** Unit and integration tests are implemented using Jest, but coverage may not be comprehensive.
+- **Improvement:** Increase test coverage and include end-to-end tests using tools like Cypress/playwright. 
 
-Current State: Unit and integration tests are implemented using Jest, but coverage may not be comprehensive.
-Improvement: Increase test coverage and include end-to-end tests using tools like Cypress/playwright. 
 
-
-### 2. Quantify the System Performance of Your Implementation
-To quantify the system performance, you can use tools like Apache JMeter, Artillery, or Locust to measure metrics such as requests per second (RPS) and response time. Here is an example of how you might measure these metrics:
+### 2. Quantify the System Performance of the Implementation
+To quantify the system performance, can use tools like Apache JMeter, Artillery, or Locust to measure metrics such as requests per second (RPS) and response time. Here is an example of how can measure these metrics:
 
 Example Performance Metrics
 ### Requests Per Second (RPS):
 
-Measurement: Use a load testing tool to simulate a high number of concurrent requests and measure the number of requests the system can handle per second.
+Measurement: load testing tool to simulate a high number of concurrent requests and measure the number of requests the system can handle per second.
 Example: The system can handle 500 RPS under a load of 1000 concurrent users.
 Response Time:
 
@@ -120,7 +116,7 @@ Example: The average response time is 200ms under a load of 1000 concurrent user
 
 Set Up Load Testing Tool:
 
-Use a tool like Apache JMeter, Artillery, or Locust.
+tool like Apache JMeter, Artillery, or Locust.
 Define test scenarios with different levels of concurrency and request rates.
 
 ## Database Association Choice, Why I approached this way?
