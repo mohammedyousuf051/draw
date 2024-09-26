@@ -1,6 +1,7 @@
 # Lucky Draw API
 
-This is the Lucky Draw API, built with Node.js, Express.js, TypeScript, and TypeORM. It uses Jest for integration and unit testing, PostgreSQL for the database, Swagger for API documentation, and Joi for request validation.
+This is the Lucky Draw API, built with Node.js, Express.js, TypeScript, and TypeORM. It uses Jest for integration and unit testing, PostgreSQL for the database, Swagger for API documentation, and Joi for request validation. 
+I implemented this in MVP pattern approach
 
 ## Technologies Used
 
