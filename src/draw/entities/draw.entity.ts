@@ -5,6 +5,8 @@ import {
     OneToMany,
     BeforeInsert,
     Index,
+    CreateDateColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { Participant } from '../../participants/entities/participant.entity';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +25,12 @@ export class Draw {
 
     @Column({ default: true })
     isActive: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    lastUpdated: Date;
 
     @OneToMany(() => Participant, (participant) => participant.draw)
     participants: Participant[];
