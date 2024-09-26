@@ -1,3 +1,4 @@
+import { getManager } from 'typeorm';
 import { getRepository } from 'typeorm';
 import { Draw } from '../entities/draw.entity';
 import { Participant } from '../../participants/entities/participant.entity';
@@ -61,7 +62,9 @@ export class DrawService {
             throw new Error('Draw not found.');
         }
 
-        await participantRepository.delete({ draw: draw });
-        await drawRepository.remove(draw);
+        await getManager().transaction(async transactionalEntityManager => {
+            await transactionalEntityManager.remove(draw.participants);
+            await transactionalEntityManager.remove(draw);
+        });
     }
 }

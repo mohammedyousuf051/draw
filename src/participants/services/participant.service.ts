@@ -1,3 +1,4 @@
+import { getManager } from 'typeorm';
 import { Participant } from '../entities/participant.entity';
 import { Draw } from '../../draw/entities/draw.entity';
 import { getRepository } from 'typeorm';
@@ -35,18 +36,23 @@ export class ParticipantService {
         const participantCount = await participantRepository.count({
             where: { draw: activeDraw },
         });
-        const participant = participantRepository.create({
-            name,
-            hkid,
-            age,
-            ticketNumber: participantCount + 1,
-            draw: activeDraw,
-        });
-        await participantRepository.save(participant);
 
-        // Update the draw
-        activeDraw.enteredTickets += 1;
-        await drawRepository.save(activeDraw);
+        const participant = await getManager().transaction(async transactionalEntityManager => {
+            const participant = participantRepository.create({
+                name,
+                hkid,
+                age,
+                ticketNumber: participantCount + 1,
+                draw: activeDraw,
+            });
+            await transactionalEntityManager.save(participant);
+
+            // Update the draw
+            activeDraw.enteredTickets += 1;
+            await transactionalEntityManager.save(activeDraw);
+
+            return participant;
+        });
 
         return participant;
     }

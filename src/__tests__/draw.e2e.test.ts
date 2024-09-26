@@ -24,7 +24,7 @@ afterAll(async () => {
 describe('Draw API - Start draw', () => {
     it('should start a new draw', async () => {
         const response = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 100 });
 
         expect(response.status).toBe(201);
@@ -34,11 +34,11 @@ describe('Draw API - Start draw', () => {
 
     it('should throw an error when starting a second draw while the first draw exists', async () => {
         // Start the first draw
-        await request(app).post('/api/draw/start').send({ totalTickets: 100 });
+        await request(app).post('/api/v1/draw/start').send({ totalTickets: 100 });
 
         // Attempt to start a second draw
         const response = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 200 });
 
         expect(response.status).toBe(400);
@@ -48,14 +48,14 @@ describe('Draw API - Start draw', () => {
 
     it('should throw 404 error when starting a new draw with totalTickets exceeding the 10**8 limit', async () => {
         const response = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 10 ** 8 + 1 });
 
         expect(response.status).toBe(400);
     });
 
     it('should throw an error when starting a new draw with missing totalTickets', async () => {
-        const response = await request(app).post('/api/draw/start').send({});
+        const response = await request(app).post('/api/v1/draw/start').send({});
 
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('error');
@@ -64,7 +64,7 @@ describe('Draw API - Start draw', () => {
 
     it('should throw an error when starting a new draw with invalid totalTickets', async () => {
         const response = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: -1 });
 
         expect(response.status).toBe(400);
@@ -79,11 +79,11 @@ describe('Draw API - End draw', () => {
     it('should end a draw', async () => {
         // Start a new draw
         const startResponse = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 100 });
 
         // End the draw
-        const endResponse = await request(app).post('/api/draw/end').send();
+        const endResponse = await request(app).post('/api/v1/draw/end').send();
 
         expect(endResponse.status).toBe(200);
     });
@@ -91,11 +91,11 @@ describe('Draw API - End draw', () => {
     it('should end a draw when no participants are present', async () => {
         // Start a new draw
         const startResponse = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 100 });
 
         // End the draw
-        const endResponse = await request(app).post('/api/draw/end').send();
+        const endResponse = await request(app).post('/api/v1/draw/end').send();
 
         expect(endResponse.status).toBe(200);
         expect(endResponse.body).not.toHaveProperty('winner');
@@ -104,13 +104,13 @@ describe('Draw API - End draw', () => {
     it('should end a draw when participants are present and show the winner', async () => {
         // Start a new draw
         const startResponse = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 10 });
 
         // Enter a participant
         for (let i = 0; i < 5; i++) {
             await request(app)
-                .post('/api/participant/enter')
+                .post('/api/v1/participant/enter')
                 .send({
                     hkid: `A123456(${i + 1})`,
                     name: `John ${i}`,
@@ -120,7 +120,7 @@ describe('Draw API - End draw', () => {
 
         // End the draw
         const endResponse = await request(app)
-            .post('/api/draw/end')
+            .post('/api/v1/draw/end')
             .send({ id: startResponse.body.id });
 
         expect(endResponse.status).toBe(200);
@@ -130,13 +130,13 @@ describe('Draw API - End draw', () => {
     it('should end a draw and create a new draw if tickets available are more than half of total tickets', async () => {
         // Start a new draw
         const startResponse = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 5 });
 
         /// Enter a participant
         for (let i = 0; i < 5; i++) {
             await request(app)
-                .post('/api/participant/enter')
+                .post('/api/v1/participant/enter')
                 .send({
                     hkid: `A123456(${i + 1})`,
                     name: `John ${i}`,
@@ -146,7 +146,7 @@ describe('Draw API - End draw', () => {
 
         // End the draw
         const endResponse = await request(app)
-            .post('/api/draw/end')
+            .post('/api/v1/draw/end')
             .send({ id: startResponse.body.id });
 
         expect(endResponse.status).toBe(200);
@@ -154,7 +154,7 @@ describe('Draw API - End draw', () => {
 
         // Check if a new draw is created
         const newDrawResponse = await request(app)
-            .post('/api/draw/start')
+            .post('/api/v1/draw/start')
             .send({ totalTickets: 100 });
 
         expect(newDrawResponse.status).toBe(400);
