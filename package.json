@@ -6,6 +6,7 @@
     "test": "jest --runInBand --coverage && exit",
     "build": "tsc",
     "start": "node dist/server.js",
+    "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migrate": "typeorm:cli migration:run -d dist/config/data-source",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "format": "prettier --write 'src/**/*.{js,ts,json,md}'"
