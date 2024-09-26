@@ -21,7 +21,32 @@ afterAll(async () => {
     }
 });
 
+describe('Draw API - Get active draw', () => {
+
+    it('should return message No Active draw is fount', async () => {
+        const response = await request(app)
+            .get('/api/v1/draw');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toStrictEqual({"message": "No active draw found"});
+    });
+
+    it('should get active draw', async () => {
+        await request(app)
+            .post('/api/v1/draw/start')
+            .send({ totalTickets: 100 });
+
+        const response = await request(app)
+            .get('/api/v1/draw');
+ 
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('id');
+    });
+    
+});
+
 describe('Draw API - Start draw', () => {
+    
     it('should start a new draw', async () => {
         const response = await request(app)
             .post('/api/v1/draw/start')

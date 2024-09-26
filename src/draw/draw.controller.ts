@@ -7,7 +7,7 @@ export class DrawController {
     static async getDraw(req: Request, res: Response) {
         try {
             const draw = await drawService.getActiveDraw();
-            res.status(200).json(draw);
+            res.status(200).json(draw ?? {message: 'No active draw found'});
         } catch (error) {
             if (error instanceof Error) {
                 res.status(400).json({ error: error.message });

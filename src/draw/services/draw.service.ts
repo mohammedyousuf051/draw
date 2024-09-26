@@ -4,9 +4,9 @@ import { Draw } from '../entities/draw.entity';
 import { Participant } from '../../participants/entities/participant.entity';
 
 export class DrawService {
-    async getActiveDraw(): Promise<Draw> {
+    async getActiveDraw(): Promise<Draw|undefined> {
         const drawRepository = getRepository(Draw);
-        return await drawRepository.findOneOrFail({
+        return drawRepository.findOne({
             where: { isActive: true },
         });
     }
